@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 const connection = require('../../../src/models/connection');
-const productsModel = require('../../../src/models/products.model');
+const productsModel = require('../../../src/models/productsModel');
 const products = require('./mocks/productsModel.mock');
 
 describe('Testes unitários da camada model referente às rotas dos produtos', function () {
@@ -25,7 +25,7 @@ describe('Testes unitários da camada model referente às rotas dos produtos', f
       sinon.stub(connection, 'execute').resolves([products[1]]);
 
       const result = await productsModel.findById(2);
-      
+
       expect(result).to.be.deep.equal(products[1]);
     });
   });
