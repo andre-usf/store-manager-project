@@ -24,8 +24,8 @@ describe('Testes unitários da camada model referente às rotas dos produtos', f
     it('Deve trazer o produto do id correspondente por meio da função "findById"', async function () {
       sinon.stub(connection, 'execute').resolves([products[1]]);
 
-      const result = await productsModel.findById();
-
+      const result = await productsModel.findById(2);
+      
       expect(result).to.be.deep.equal(products[1]);
     });
   });
