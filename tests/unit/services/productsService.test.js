@@ -22,7 +22,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
   describe('Quando acessada a rota "/products/:id" ', function () {
     it('Deve trazer o produto do id correspondente se o produto existir', async function () {
-      sinon.stub(productsModel, 'findById').resolves([products[1]]);
+      sinon.stub(productsModel, 'findById').resolves(products[1]);
 
       const result = await productsService.findById(2);
 
