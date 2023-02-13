@@ -40,7 +40,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       };
 
       res.status = sinon.stub().returns(res);
-      req.json = sinon.stub().returns();
+      res.json = sinon.stub().returns();
 
       sinon.stub(productsService, 'findById').resolves(products[1]);
 
@@ -57,7 +57,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       };
 
       res.status = sinon.stub().returns(res);
-      req.json = sinon.stub().returns();
+      res.json = sinon.stub().returns();
 
       sinon.stub(productsService, 'findById').resolves({ message: "Product not found" });
 
