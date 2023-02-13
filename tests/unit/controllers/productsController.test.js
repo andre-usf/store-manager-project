@@ -1,11 +1,14 @@
-const { expect } = require('chai');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-
-const products = require('./mocks/productsController.mock');
+const { expect } = chai;
 
 chai.use(sinonChai);
+
+const products = require('./mocks/productsController.mock');
+const productsService = require('../../../src/services/productsService');
+const productsController = require('../../../src/controllers/productsController');
+
 
 describe('Testes unitários da camada controller referente às rotas dos produtos', function () {
   afterEach(function () {
@@ -18,13 +21,13 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       const req = {};
 
       res.status = sinon.stub().returns(res);
-      req.json = sinon.stub().returns();
+      res.json = sinon.stub().returns();
       
       sinon.stub(productsService, 'getAll').resolves(products);
 
       await productsController.listAllProducts(req, res);
 
-      expect(res.status).to.have.calledWith(200);
+      expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(products);
     });
   });
