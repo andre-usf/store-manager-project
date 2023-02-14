@@ -54,5 +54,22 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
       expect(result.result).to.be.equal(insertId);
     });
+    
+    it('Deve retornar um objeto com o erro tipo ANY_REQUIRED e uma mensagem ""name" is required" caso o nome não exista', async function () {
+      
+      const result = await productsService.createProduct();
+      
+      expect(result.type).to.be.equal('ANY_REQUIRED')
+      expect(result.result.message).to.be.equal('"name" is required');
+    });
+    it('Deve retornar um objeto com o erro tipo STRING_MIN e uma mensagem ""name" length must be at least 5 characters long" caso o nome tenha menos que 5 caracteres', async function () {
+
+      const invalidName = 'test';
+
+      const result = await productsService.createProduct(invalidName);
+
+      expect(result.type).to.be.equal('STRING_MIN')
+      expect(result.result.message).to.be.equal('"name" length must be at least 5 characters long');
+    });
   });
 });
