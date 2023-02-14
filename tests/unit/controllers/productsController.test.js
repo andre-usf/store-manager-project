@@ -70,7 +70,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
   });
 
   describe('Quando acessada a rota POST "/products"', async function () {
-    it('Deve retornar um objeto com o nome e id do produto cadastrado', async function () {
+    it('Deve retornar um objeto com o nome e id do produto cadastrado se o produto for válido', async function () {
       const res = {};
       const req = {
         body: {
@@ -82,7 +82,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       res.json = sinon.stub().returns();
 
       sinon.stub(productsService, 'createProduct')
-        .resolves({ type: null, id: 4 });
+        .resolves({ type: null, result: 4 });
     
       await productsController.createProduct(req, res);
 
