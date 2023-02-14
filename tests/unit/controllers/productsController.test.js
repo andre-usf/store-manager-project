@@ -70,7 +70,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
   });
 
   describe('Quando acessada a rota POST "/products"', async function () {
-    it('Deve retornar um objeto com o nome e id do produto cadastrado se o produto for válido', async function () {
+    it('Deve retornar o status 200 e um objeto com o nome e id do produto cadastrado se o produto for válido', async function () {
       const res = {};
       const req = {
         body: {
@@ -88,6 +88,44 @@ describe('Testes unitários da camada controller referente às rotas dos produto
 
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 })
+    });
+    it('Deve retornar o status 400 e a mensagem ""name" is required" no caso de não existir o campo "name" ', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: '',
+        },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'createProduct')
+        .resolves({ type: 'ANY_REQUIRED', result: { message: '"name" is required' } });
+
+      await productsController.createProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(400);
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' })
+    });
+    it('Deve retornar o status 422 e a mensagem ""name" length must be at least 5 characters long" no caso de o campo name ter menos de 5 caracteres', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'oo',
+        },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'createProduct')
+        .resolves({ type: 'STRING_MIN', result: { message: '"name" length must be at least {#limit} characters long' } });
+
+      await productsController.createProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least {#limit} characters long' })
     });
   });
 });
