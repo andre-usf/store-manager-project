@@ -1,15 +1,12 @@
 const schemas = require('./schemas');
-
-const typeErrorReplace = (error) => error.details[0].type.toUpperCase().replace('.', '_');
-
-const errorMessage = (error) => error.details[0].message;
+const handleErrorMessages = require('../../utils/handleErrorMessages');
 
 const validateProductName = (productName) => {
   const { error } = schemas.productNameSchema.validate(productName);
   if (error) {
     return {
-      type: typeErrorReplace(error),
-      result: { message: errorMessage(error) },
+      type: handleErrorMessages.typeErrorReplace(error),
+      result: { message: handleErrorMessages.errorMessage(error) },
     };
   }
   return { type: null, result: '' };
