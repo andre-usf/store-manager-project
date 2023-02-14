@@ -16,7 +16,8 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
       const result = await productsService.getAll();
 
-      expect(result).to.be.deep.equal(products);
+      expect(result.type).to.be.equal(null);
+      expect(result.result).to.be.deep.equal(products);
     });
   });
 
@@ -26,14 +27,16 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
       const result = await productsService.findById(2);
 
-      expect(result).to.be.deep.equal(products[1]);
+      expect(result.type).to.be.equal(null);
+      expect(result.result).to.be.deep.equal(products[1]);
     });
     it('Deve trazer a mensagem "message": "Product not found" se o produto não existir', async function () {
       sinon.stub(productsModel, 'findById').resolves(undefined);
 
       const result = await productsService.findById(3);
 
-      expect(result.message).to.be.equal("Product not found");
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
+      expect(result.result.message).to.be.equal("Product not found");
     });
   });
 });

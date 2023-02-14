@@ -23,7 +23,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       
-      sinon.stub(productsService, 'getAll').resolves(products);
+      sinon.stub(productsService, 'getAll').resolves({ type: null, result: products });
 
       await productsController.listAllProducts(req, res);
 
@@ -42,7 +42,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      sinon.stub(productsService, 'findById').resolves(products[1]);
+      sinon.stub(productsService, 'findById').resolves({ type: null, result: products[1] });
 
       await productsController.listProductById(req, res);
 
@@ -59,12 +59,12 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      sinon.stub(productsService, 'findById').resolves({ message: "Product not found" });
+      sinon.stub(productsService, 'findById').resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
 
       await productsController.listProductById(req, res);
 
       expect(res.status).to.have.calledWith(404);
-      expect(res.json).to.have.been.calledWith("Product not found");
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
     });
   });
 });
