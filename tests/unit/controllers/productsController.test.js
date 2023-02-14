@@ -15,7 +15,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
     sinon.restore();
   });
 
-  describe('Quando acessada a rota "/products"', function () {
+  describe('Quando acessada a rota GET "/products"', function () {
     it('Deve retornar o status 200 e uma lista dos produtos', async function () {
       const res = {};
       const req = {};
@@ -32,7 +32,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
     });
   });
 
-  describe('Quando acessada a rota "/products/:id"', function () {
+  describe('Quando acessada a rota GET "/products/:id"', function () {
     it('Deve retornar o status 200 e o produto com o id correspondente se o produto existir', async function () {
       const res = {};
       const req = {
@@ -59,12 +59,33 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
 
-      sinon.stub(productsService, 'findById').resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+      sinon.stub(productsService, 'findById')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
 
       await productsController.listProductById(req, res);
 
-      expect(res.status).to.have.calledWith(404);
+      expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
     });
+  });
+
+  describe('Quando acessada a rota POST "/products"', async function () {
+    const res = {};
+    const req = {
+      body: {
+        name: 'teste',
+      },
+    };
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+
+    sinon.stub(productsService, 'createProduct')
+      .resolves({ type: null, id: 4 });
+    
+    await productsController.createProduct(req, res);
+
+    expect(res.status).to.have.been.calledWith(201);
+    expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 })
   });
 });

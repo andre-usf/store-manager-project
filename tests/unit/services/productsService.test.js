@@ -10,7 +10,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
     sinon.restore();
   });
 
-  describe('Quando acessada a rota "/products"', function () {
+  describe('Quando acessada a rota GET "/products"', function () {
     it('Deve trazer todos os produtos por meio da função "getAll"', async function () {
       sinon.stub(productsModel, 'getAll').resolves(products);
 
@@ -21,7 +21,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
     });
   });
 
-  describe('Quando acessada a rota "/products/:id" ', function () {
+  describe('Quando acessada a rota GET "/products/:id" ', function () {
     it('Deve trazer o produto do id correspondente se o produto existir', async function () {
       sinon.stub(productsModel, 'findById').resolves(products[1]);
 
@@ -37,6 +37,22 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
       expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
       expect(result.result.message).to.be.equal("Product not found");
+    });
+  });
+
+  describe('Quando acessada a rota POST "/products"', function () {
+    it('Deve retornar um objeto com o id do produto cadastrado', async function () {
+      const insertId = 3;
+
+      const insertedProduct = {
+        name: 'teste',
+      };
+      
+      sinon.stub(productsModel, 'insert').resolves(insertId);
+
+      const result = await productsService.createProduct(insertedProduct.name);
+
+      expect(result.result).to.be.equal(insertId);
     });
   });
 });

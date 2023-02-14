@@ -31,7 +31,7 @@ describe('Testes unitários da camada model referente às rotas dos produtos', f
   });
 
   describe('Quando acessada a rota POST "/products"', function () {
-    it('Deve inserir o produto e retornar um objeto com seu nome e id', async function () {
+    it('Deve inserir o produto e retornar um objeto com o id do produto cadastrado', async function () {
       const insertId = 3;
 
       const insertedProduct = {
