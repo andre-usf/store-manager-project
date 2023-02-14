@@ -70,22 +70,24 @@ describe('Testes unitários da camada controller referente às rotas dos produto
   });
 
   describe('Quando acessada a rota POST "/products"', async function () {
-    const res = {};
-    const req = {
-      body: {
-        name: 'teste',
-      },
-    };
+    it('Deve retornar um objeto com o nome e id do produto cadastrado', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'teste',
+        },
+      };
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    sinon.stub(productsService, 'createProduct')
-      .resolves({ type: null, id: 4 });
+      sinon.stub(productsService, 'createProduct')
+        .resolves({ type: null, id: 4 });
     
-    await productsController.createProduct(req, res);
+      await productsController.createProduct(req, res);
 
-    expect(res.status).to.have.been.calledWith(201);
-    expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 })
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 })
+    });
   });
 });
