@@ -16,8 +16,7 @@ const createSales = async (req, res) => {
 };
 
 const getAllSales = async (_req, res) => {
-  const { type, result } = await salesService.getAllSales();
-  if (type) return res.status(404).json(result);
+  const { result } = await salesService.getAllSales();
   return res.status(200).json(result);
 };
 
