@@ -25,7 +25,6 @@ const getSaleById = async (req, res) => {
   const { id } = req.params;
   const { type, result } = await salesService.getSaleById(id);
   if (type === 'SALE_NOT_FOUND') return res.status(404).json(result);
-  console.log(result);
   return res.status(200).json(result);
 };
 

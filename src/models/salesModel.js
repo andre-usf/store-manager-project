@@ -37,7 +37,6 @@ const getSaleById = async (id) => {
     ORDER BY sale_id ASC, product_id ASC`,
     [id],
   );
-  console.log(sale);
   return sale;
 };
 
