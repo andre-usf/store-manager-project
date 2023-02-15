@@ -9,6 +9,9 @@ const createSales = async (req, res) => {
   if (type === 'NUMBER_MIN') {
     return res.status(422).json(result);
   }
+  if (type === 'PRODUCT_NOT_FOUND') {
+    return res.status(404).json(result);
+  }
   return res.status(201).json({ id: result, itemsSold: req.body });
 };
 
