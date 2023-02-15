@@ -9,10 +9,11 @@ const insertSales = async () => {
 };
 
 const insertProductSale = async (saleId, { productId, quantity }) => {
-  await connection.execute(
+  const [{ affectedRows }] = await connection.execute(
     'INSERT INTO StoreManager.sales_products (product_Id, sale_Id, quantity) VALUE (?, ?, ?)',
     [productId, saleId, quantity],
   );
+  return affectedRows;
 };
 
 module.exports = {
