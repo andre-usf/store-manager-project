@@ -12,7 +12,7 @@ describe('Testes unitários da camada model referente às rotas de vendas', func
 
   describe('Quando acessada a rota POST "/sales"', function () {
     it('Deve deve inserir uma venda por meio da função "insertSales" e retornar o insertId', async function () {
-      sinon.stub(connection, 'execute').resolves([{ insertId: 2}]);
+      sinon.stub(connection, 'execute').resolves([{ insertId: 2 }]);
 
       const result = await salesModel.insertSales();
 
@@ -26,7 +26,10 @@ describe('Testes unitários da camada model referente às rotas de vendas', func
 
       expect(result).to.be.equal(1);
     });
+  });
 
+  describe('Quando acessada a rota GET "/sales"', function () {
+  
     it('Deve trazer todos os produtos por meio da função "getAllSales"', async function () {
       sinon.stub(connection, 'execute').resolves([salesMock.allSales]);
 
@@ -34,7 +37,9 @@ describe('Testes unitários da camada model referente às rotas de vendas', func
 
       expect(result).to.be.equal(salesMock.allSales);
     });
+  });
 
+  describe('Quando acessada a rota GET "/sales/:id"', function () {
     it('Deve trazer todos o produto passado por id por meio da função "getSaleById"', async function () {
       sinon.stub(connection, 'execute').resolves([salesMock.saleById]);
 

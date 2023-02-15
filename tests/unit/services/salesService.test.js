@@ -57,7 +57,9 @@ describe('Testes unitários da camada service referente às rotas das vendas - P
       expect(result.type).to.be.equal('PRODUCT_NOT_FOUND')
       expect(result.result.message).to.be.equal('Product not found');
     });
-    
+  });
+  
+  describe('Quando acessada a rota GET "/sales"', function () {
     it('Deve trazer todas as vendas por meio da função "getAllSales"', async function () {
       sinon.stub(salesModel, 'getAllSales').resolves(salesMock.allSales);
 
@@ -66,7 +68,9 @@ describe('Testes unitários da camada service referente às rotas das vendas - P
       expect(result.type).to.be.equal(null)
       expect(result.result).to.be.deep.equal(salesMock.allSales);
     });
+  });
 
+  describe('Quando acessada a rota GET "/sales/:id"', function() {
     it('Deve trazer a venda que corresponda ao id passado por parâmetro, por meio da função "getSaleById"', async function () {
       sinon.stub(salesModel, 'getSaleById').resolves(salesMock.saleById);
 
@@ -84,5 +88,5 @@ describe('Testes unitários da camada service referente às rotas das vendas - P
       expect(result.type).to.be.equal('SALE_NOT_FOUND')
       expect(result.result.message).to.be.deep.equal("Sale not found");
     });
-  });
+  })
 });
