@@ -26,5 +26,21 @@ describe('Testes unitários da camada model referente às rotas de vendas', func
 
       expect(result).to.be.equal(1);
     });
+
+    it('Deve trazer todos os produtos por meio da função "getAllSales"', async function () {
+      sinon.stub(connection, 'execute').resolves([salesMock.allSales]);
+
+      const result = await salesModel.getAllSales();
+
+      expect(result).to.be.equal(salesMock.allSales);
+    });
+
+    it('Deve trazer todos o produto passado por id por meio da função "getSaleById"', async function () {
+      sinon.stub(connection, 'execute').resolves([salesMock.saleById]);
+
+      const result = await salesModel.getSaleById(1);
+
+      expect(result).to.be.equal(salesMock.saleById);
+    });
   });
 });
