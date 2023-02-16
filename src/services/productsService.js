@@ -39,7 +39,16 @@ const deleteProduct = async (productId) => {
   
   const result = await productsModel.deleteProduct(productId);
   return { type: null, result };
- };
+};
+ 
+const searchProductByQuery = async (query) => {
+  const products = await productsModel.searchProductByQuery(query);
+  if (products.length === 0) {
+    const { result } = getAll();
+    return { type: 'GET_ALL', result };
+  }
+  return { type: null, result: products };
+};
 
 module.exports = {
   getAll,
@@ -47,4 +56,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  searchProductByQuery,
 };
