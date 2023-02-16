@@ -24,12 +24,13 @@ const insert = async (productName) => {
 };
 
 const updateProduct = async (productName, productId) => {
-  await connection.execute(
+  const [{ changedRows }] = await connection.execute(
     `UPDATE StoreManager.products
     SET name = (?)
     WHERE id = (?)`, 
     [productName, productId],
   );
+  return changedRows;
 };
 
 const deleteProduct = async (productId) => { 
