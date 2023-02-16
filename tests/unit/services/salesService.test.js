@@ -6,7 +6,7 @@ const salesService = require('../../../src/services/salesService');
 const salesMock = require('./mocks/salesService.mock');
 const productsService = require('../../../src/services/productsService');
 
-describe('Testes unitários da camada service referente às rotas das vendas - POST /sales', function () {
+describe('Testes unitários da camada service referente às rotas das vendas', function () {
   
   afterEach(function () {
     sinon.restore();

@@ -87,7 +87,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       await productsController.createProduct(req, res);
 
       expect(res.status).to.have.been.calledWith(201);
-      expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 })
+      expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 });
     });
     it('Deve retornar o status 400 e a mensagem ""name" is required" no caso de não existir o campo "name" ', async function () {
       const res = {};
@@ -106,7 +106,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       await productsController.createProduct(req, res);
 
       expect(res.status).to.have.been.calledWith(400);
-      expect(res.json).to.have.been.calledWith({ message: '"name" is required' })
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
     });
     it('Deve retornar o status 422 e a mensagem ""name" length must be at least 5 characters long" no caso de o campo name ter menos de 5 caracteres', async function () {
       const res = {};
@@ -120,12 +120,132 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       res.json = sinon.stub().returns();
 
       sinon.stub(productsService, 'createProduct')
-        .resolves({ type: 'STRING_MIN', result: { message: '"name" length must be at least {#limit} characters long' } });
+        .resolves({ type: 'STRING_MIN', result: { message: '"name" length must be at least 5 characters long' } });
 
       await productsController.createProduct(req, res);
 
       expect(res.status).to.have.been.calledWith(422);
-      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least {#limit} characters long' })
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+  });
+
+  describe('Quando acessada a rota PUT "/products/:id"', async function () {
+    it('Deve retornar o status 200 e um objeto com o id e nome do produto alterado caso o produto seja válido', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'teste',
+        },
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'updateProduct').resolves({ type: null, result: 1 });
+
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith({ id: 1, name: 'teste' });
+    });
+
+    it('Deve retornar o status 400 e a mensagem ""name" is required" no caso de não existir o campo "name"', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: '',
+        },
+        params: { id: 1 },
+      };
+
+      sinon.stub(productsService, 'updateProduct').resolves({ type: 'ANY_REQUIRED', result: { message: '"name" is required' } });
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(400);
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+    });
+
+    it('Deve retornar o status 422 e a mensagem ""name" length must be at least 5 characters long" no caso de o campo name ter menos de 5 caracteres', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'oi',
+        },
+        params: { id: 1 },
+      };
+
+      sinon.stub(productsService, 'updateProduct')
+        .resolves({ type: 'STRING_MIN', result: { message: '"name" length must be at least 5 characters long' } });
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+
+    it('Deve retornar o status 404 e a mensagem "Product Not Found" no caso de não existir o produto no banco de dados', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'teste',
+        },
+        params: { id: 99 },
+      };
+
+      sinon.stub(productsService, 'updateProduct')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.updateProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
+
+  describe('Quando acessada a rota DELETE "/products/:id"', async function () {
+    it('Deve retornar o status 204 caso o produto seja válido', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.end = sinon.stub().returns();
+
+      sinon.stub(productsService, 'deleteProduct').resolves({ type: null, result: 1 });
+
+      await productsController.deleteProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+    });
+
+    it('Deve retornar o status 404 e a mensagem "Product Not Found" no caso de não existir o produto no banco de dados', async function () {
+      const res = {};
+      const req = {
+        params: { id: 99 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'deleteProduct')
+        .resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+
+      await productsController.deleteProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
     });
   });
 });
