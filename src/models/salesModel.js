@@ -27,7 +27,7 @@ const getAllSales = async () => {
   return sales;
 };
 
-const getSaleById = async (id) => {
+const getSaleById = async (saleId) => {
   const [sale] = await connection.execute(
     `SELECT date, product_id AS productId, quantity 
     FROM StoreManager.sales_products AS sales_products
@@ -35,7 +35,7 @@ const getSaleById = async (id) => {
     ON sales_products.sale_id = sales.id
     WHERE sales_products.sale_id = (?)
     ORDER BY sale_id ASC, product_id ASC`,
-    [id],
+    [saleId],
   );
   return sale;
 };
@@ -49,10 +49,21 @@ const deleteSale = async (saleId) => {
   return affectedRows;
 };
 
+const updateSale = async (saleId, { productId, quantity }) => {
+  const [{ changedRows }] = await connection.execute(
+    `UPDATE StoreManager.sales_products
+    SET product_id = (?), quantity = (?)
+    WHERE sale_id = (?) AND product_id = (?)`,
+    [productId, quantity, saleId, productId],
+  );
+  return changedRows;
+};
+
 module.exports = {
   insertSales,
   insertProductSale,
   getAllSales,
   getSaleById,
   deleteSale,
+  updateSale,
 };

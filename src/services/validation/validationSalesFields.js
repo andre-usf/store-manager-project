@@ -1,9 +1,9 @@
 const schemas = require('./schemas');
 const handleErrorMessages = require('../../utils/handleErrorMessages');
 
-const validateSalesFields = (sales) => {
-  const resultArray = sales.map((sale) => {
-    const { error } = schemas.salesProductsSchema.validate(sale);
+const validateSalesFields = (sale) => {
+  const resultArray = sale.map((productSale) => {
+    const { error } = schemas.salesProductsSchema.validate(productSale);
     return error;
   });
 

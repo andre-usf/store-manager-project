@@ -1,17 +1,11 @@
 const salesService = require('../services/salesService');
 
 const createSales = async (req, res) => {
-  const sales = req.body;
-  const { type, result } = await salesService.createSales(sales);
-  if (type === 'ANY_REQUIRED') {
-    return res.status(400).json(result);
-  }
-  if (type === 'NUMBER_MIN') {
-    return res.status(422).json(result);
-  }
-  if (type === 'PRODUCT_NOT_FOUND') {
-    return res.status(404).json(result);
-  }
+  const sale = req.body;
+  const { type, result } = await salesService.createSales(sale);
+  if (type === 'ANY_REQUIRED') return res.status(400).json(result);
+  if (type === 'NUMBER_MIN') return res.status(422).json(result);
+  if (type === 'PRODUCT_NOT_FOUND') return res.status(404).json(result);
   return res.status(201).json({ id: result, itemsSold: req.body });
 };
 
@@ -34,9 +28,21 @@ const deleteSale = async (req, res) => {
   return res.status(204).end();
 };
 
+const updateSale = async (req, res) => {
+  const { id } = req.params;
+  const sale = req.body;
+  const { type, result } = await salesService.updateSale(id, sale);
+  if (type === 'ANY_REQUIRED') return res.status(400).json(result);
+  if (type === 'NUMBER_MIN') return res.status(422).json(result);
+  if (type === 'PRODUCT_NOT_FOUND') return res.status(404).json(result);
+  if (type === 'SALE_NOT_FOUND') return res.status(404).json(result);
+  return res.status(200).json({ saleId: result, itemsUpdated: req.body });
+};
+
 module.exports = {
   createSales,
   getAllSales,
   getSaleById,
   deleteSale,
+  updateSale,
 };

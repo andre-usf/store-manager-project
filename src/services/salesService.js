@@ -1,25 +1,14 @@
 const salesModel = require('../models/salesModel');
-const validation = require('./validation/validationSalesFields');
-const productsService = require('./productsService');
+const validation = require('./validation/validationSale');
 
-const createSales = async (sales) => {
-  const error = validation.validateSalesFields(sales);
-  if (error.type) {
-    return error;
-  } 
-  
-  const resultArrayProducts = await Promise.all(sales
-    .map(async (sale) => productsService.findById(sale.productId)));
-  
-  const productNotFound = resultArrayProducts.find((product) => product.type);
-
-  if (productNotFound) {
-    return productNotFound;
-  }
+const createSales = async (sale) => {
+  const error = await validation.validationSale(sale);
+  if (error.type) return error;
 
   const saleId = await salesModel.insertSales();
   
-  await Promise.all(sales.map(async (sale) => salesModel.insertProductSale(saleId, sale)));
+  await Promise.all(sale.map(async (productSale) => salesModel
+    .insertProductSale(saleId, productSale)));
 
   return { type: null, result: saleId };
 };
@@ -45,9 +34,25 @@ const deleteSale = async (saleId) => {
   return { type: null, result };
 };
 
+const updateSale = async (saleId, sale) => {
+  const error = await validation.validationSale(sale);
+  if (error.type) return error;
+
+  const errorSaleId = await getSaleById(saleId);
+  if (errorSaleId.type) return errorSaleId;
+
+  await deleteSale(saleId);
+
+  await Promise.all(sale.map(async (productSale) => salesModel
+    .insertProductSale(saleId, productSale)));
+
+  return { type: null, result: saleId };
+};
+
 module.exports = {
   createSales,
   getAllSales,
   getSaleById,
   deleteSale,
+  updateSale,
 };
