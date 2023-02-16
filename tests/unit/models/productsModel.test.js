@@ -61,4 +61,18 @@ describe('Testes unitários da camada model referente às rotas dos produtos', f
       expect(result).to.be.equal(changedRows);
     });
   });
+
+  describe('Quando acessada a rota DELETE "/products/:id"', function () {
+    it('Deve deletar o produto referente ao id passado por parâmetro caso o produto exista', async function () {
+      const affectedRows = 1;
+
+      const productId = 1;
+
+      sinon.stub(connection, 'execute').resolves([{ affectedRows }]);
+
+      const result = await productsModel.deleteProduct(productId);
+
+      expect(result).to.be.equal(affectedRows);
+    });
+  });
 });
