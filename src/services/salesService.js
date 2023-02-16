@@ -37,8 +37,17 @@ const getSaleById = async (id) => {
   return { type: null, result: sale };
 };
 
+const deleteSale = async (saleId) => {
+  const error = await getSaleById(saleId);
+  if (error.type) return error;
+
+  const result = await salesModel.deleteSale(saleId);
+  return { type: null, result };
+};
+
 module.exports = {
   createSales,
   getAllSales,
   getSaleById,
+  deleteSale,
 };
