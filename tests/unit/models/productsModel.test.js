@@ -45,4 +45,20 @@ describe('Testes unitários da camada model referente às rotas dos produtos', f
       expect(result).to.be.equal(insertId);
     });
   });
+
+  describe('Quando acessada a rota PUT "/products/:id"', function () {
+    it('Deve alterar o produto referente ao id passado por parâmetro caso o nome seja válido e o produto exista', async function () {
+      const changedRows = 1;
+      
+      const productName = "Teste";
+
+      const productId = 1;
+
+      sinon.stub(connection, 'execute').resolves([{ changedRows }]);
+
+      const result = await productsModel.updateProduct(productName, productId);
+
+      expect(result).to.be.equal(changedRows);
+    });
+  });
 });
