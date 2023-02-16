@@ -72,4 +72,78 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
       expect(result.result.message).to.be.equal('"name" length must be at least 5 characters long');
     });
   });
+  
+  describe('Quando acessada a rota PUT "/products/:id"', function () {
+    it('Deve retornar um objeto com número de linhas alteradas', async function () {
+      const productName = 'teste';
+      
+      const productId = 3;
+
+      sinon.stub(productsModel, 'updateProduct').resolves(1);
+
+      const result = await productsService.updateProduct(productName, productId);
+
+      expect(result.type).to.be.equal(null)
+      expect(result.result).to.be.equal(1);
+    });
+
+    it('Deve retornar um objeto com o erro tipo ANY_REQUIRED e uma mensagem ""name" is required" caso o nome não exista', async function () {
+      let productName;
+
+      const productId = 1;
+
+      const result = await productsService.updateProduct(productName, productId);
+
+      expect(result.type).to.be.equal('ANY_REQUIRED')
+      expect(result.result.message).to.be.equal('"name" is required');
+    });
+
+    it('Deve retornar um objeto com o erro tipo STRING_MIN e uma mensagem ""name" length must be at least 5 characters long" caso o nome tenha menos que 5 caracteres', async function () {
+      const productName = 'tes';
+
+      const productId = 1;
+
+      const result = await productsService.updateProduct(productName, productId);
+
+      expect(result.type).to.be.equal('STRING_MIN')
+      expect(result.result.message).to.be.equal('"name" length must be at least 5 characters long');
+    });
+
+    it('Deve retornar um objeto com o erro tipo PRODUCT_NOT_FOUND e uma mensagem "Product not found" caso o produto não exista', async function () {
+      const productName = 'teste';
+
+      const productId = 99;
+      
+      sinon.stub(productsService, 'findById').resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+
+      const result = await productsService.updateProduct(productName, productId);
+
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND')
+      expect(result.result.message).to.be.equal('Product not found');
+    });
+  });
+
+  describe('Quando acessada a rota DELETE "/products/:id"', function () {
+    it('Deve retornar um objeto com número de linhas afetadas', async function () {
+      const productId = 1;
+
+      sinon.stub(productsModel, 'deleteProduct').resolves(1);
+
+      const result = await productsService.deleteProduct(productId);
+
+      expect(result.type).to.be.equal(null)
+      expect(result.result).to.be.equal(1);
+    });
+    
+    it('Deve retornar um objeto com o erro tipo PRODUCT_NOT_FOUND e uma mensagem "Product not found" caso o produto não exista', async function () {
+      const productId = 99;
+
+      sinon.stub(productsService, 'findById').resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+
+      const result = await productsService.deleteProduct(productId);
+
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND')
+      expect(result.result.message).to.be.equal('Product not found');
+    });
+  });
 });

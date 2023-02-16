@@ -29,15 +29,16 @@ const updateProduct = async (productName, productId) => {
   const errorId = await findById(productId);
   if (errorId.type) return errorId;
 
-  await productsModel.updateProduct(productName, productId);
-  return { type: null, result: '' };
+  const result = await productsModel.updateProduct(productName, productId);
+  return { type: null, result };
 };
 
 const deleteProduct = async (productId) => {
   const error = await findById(productId);
   if (error.type) return error;
-  await productsModel.deleteProduct(productId);
-  return { type: null, result: '' };
+  
+  const result = await productsModel.deleteProduct(productId);
+  return { type: null, result };
  };
 
 module.exports = {
