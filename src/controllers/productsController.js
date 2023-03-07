@@ -9,7 +9,6 @@ const listAllProducts = async (_req, res) => {
 
 const listProductById = async (req, res) => {
   const { id } = req.params;
-  
   const { type, result } = await productsService.findById(id);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -19,7 +18,6 @@ const listProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const { name } = req.body;
-  
   const { type, result } = await productsService.createProduct(name);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -29,9 +27,7 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
-  
   const { name } = req.body;
-  
   const { type, result } = await productsService.updateProduct(name, id);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -41,7 +37,6 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  
   const { type, result } = await productsService.deleteProduct(id);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -51,7 +46,6 @@ const deleteProduct = async (req, res) => {
 
 const searchProductByQuery = async (req, res) => { 
   const { q } = req.query;
-  
   const { type, result } = await productsService.searchProductByQuery(q);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);

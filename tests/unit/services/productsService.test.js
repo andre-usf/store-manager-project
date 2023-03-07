@@ -148,4 +148,31 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
       expect(result.result.message).to.be.equal('Product not found');
     });
   });
+
+
+  describe('Quando acessada a rota GET "/products/search"', function () {
+    it('Deve retornar um array com os produtos encontrados', async function () {
+      const query = 'Martelo';
+
+      sinon.stub(productsModel, 'searchProductByQuery').resolves([products[0]]);
+
+      const result = await productsService.searchProductByQuery(query);
+
+      expect(result.type).to.be.equal(null)
+      expect(result.result).to.be.deep.equal([products[0]]);
+    });
+
+    it('Deve retornar um array vazio caso não encontrado nenhum produto', async function () {
+      const query = 'Produto que não existe';
+
+      sinon.stub(productsModel, 'searchProductByQuery').resolves([]);
+      sinon.stub(productsModel, 'getAll').resolves(products);
+
+      const result = await productsService.searchProductByQuery(query);
+
+      console.log(result)
+      expect(result.type).to.be.equal('GET_ALL')
+      expect(result.result).to.be.deep.equal(products);
+    });
+  });
 });

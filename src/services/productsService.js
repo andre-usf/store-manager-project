@@ -44,7 +44,7 @@ const deleteProduct = async (productId) => {
 const searchProductByQuery = async (query) => {
   const products = await productsModel.searchProductByQuery(query);
   if (products.length === 0) {
-    const { result } = getAll();
+    const { result } = await getAll();
     return { type: 'GET_ALL', result };
   }
   return { type: null, result: products };
