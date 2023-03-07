@@ -77,8 +77,9 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
     it('Deve retornar um objeto com número de linhas alteradas', async function () {
       const productName = 'teste';
       
-      const productId = 3;
+      const productId = 1;
 
+      sinon.stub(productsModel, 'findById').resolves(products[0]);
       sinon.stub(productsModel, 'updateProduct').resolves(1);
 
       const result = await productsService.updateProduct(productName, productId);
@@ -114,7 +115,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
       const productId = 99;
       
-      sinon.stub(productsService, 'findById').resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+      sinon.stub(productsModel, 'findById').resolves(undefined);
 
       const result = await productsService.updateProduct(productName, productId);
 
@@ -127,6 +128,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
     it('Deve retornar um objeto com número de linhas afetadas', async function () {
       const productId = 1;
 
+      sinon.stub(productsModel, 'findById').resolves(products[0]);
       sinon.stub(productsModel, 'deleteProduct').resolves(1);
 
       const result = await productsService.deleteProduct(productId);
@@ -138,7 +140,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
     it('Deve retornar um objeto com o erro tipo PRODUCT_NOT_FOUND e uma mensagem "Product not found" caso o produto não exista', async function () {
       const productId = 99;
 
-      sinon.stub(productsService, 'findById').resolves({ type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } });
+      sinon.stub(productsModel, 'findById').resolves(undefined);
 
       const result = await productsService.deleteProduct(productId);
 
