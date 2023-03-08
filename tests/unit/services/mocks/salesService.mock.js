@@ -1,4 +1,4 @@
-const validSales = [
+const validSale = [
   {
     productId: 1,
     quantity: 1
@@ -82,7 +82,7 @@ const saleById = [
 ]
 
 module.exports = {
-  validSales,
+  validSale,
   saleWithoutProductId,
   saleWithoutQuantity,
   saleZeroQuantity,

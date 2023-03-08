@@ -170,7 +170,6 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
 
       const result = await productsService.searchProductByQuery(query);
 
-      console.log(result)
       expect(result.type).to.be.equal('GET_ALL')
       expect(result.result).to.be.deep.equal(products);
     });
