@@ -1,4 +1,4 @@
-const sales = [
+const sale = [
   {
     productId: 1,
     quantity: 1
@@ -40,7 +40,7 @@ const saleById = [
 ]
 
 module.exports = {
-  sales,
+  sale,
   saleId,
   allSales,
   saleById,
