@@ -89,6 +89,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       expect(res.status).to.have.been.calledWith(201);
       expect(res.json).to.have.been.calledWith({ name: 'teste', id: 4 });
     });
+    
     it('Deve retornar o status 400 e a mensagem ""name" is required" no caso de não existir o campo "name" ', async function () {
       const res = {};
       const req = {
@@ -108,6 +109,7 @@ describe('Testes unitários da camada controller referente às rotas dos produto
       expect(res.status).to.have.been.calledWith(400);
       expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
     });
+    
     it('Deve retornar o status 422 e a mensagem ""name" length must be at least 5 characters long" no caso de o campo name ter menos de 5 caracteres', async function () {
       const res = {};
       const req = {
@@ -246,6 +248,44 @@ describe('Testes unitários da camada controller referente às rotas dos produto
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
+
+  describe('Quando acessada a rota GET "/products/search"', function () {
+    it('Deve retornar o status 200 e um array com os produtos encontrados', async function () {
+      const res = {};
+      const req = {
+        query: { q: 'Martelo' },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'searchProductByQuery')
+        .resolves({ type: null, result: [products[0]] });
+
+      await productsController.searchProductByQuery(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith([products[0]]);
+    });
+
+    it('Deve retornar o status 200 e um array todos os produtos, caso não encontre um produto correspondent à pesquisa', async function () {
+      const res = {};
+      const req = {
+        query: { q: 'Teste' },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(productsService, 'searchProductByQuery')
+        .resolves({ type: 'GET_ALL', result: products });
+
+      await productsController.searchProductByQuery(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(products);
     });
   });
 });

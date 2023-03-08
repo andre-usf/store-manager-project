@@ -11,7 +11,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
   });
 
   describe('Quando acessada a rota GET "/products"', function () {
-    it('Deve trazer todos os produtos por meio da função "getAll"', async function () {
+    it('Deve retornar todos os produtos por meio da função "getAll"', async function () {
       sinon.stub(productsModel, 'getAll').resolves(products);
 
       const result = await productsService.getAll();
@@ -22,7 +22,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
   });
 
   describe('Quando acessada a rota GET "/products/:id" ', function () {
-    it('Deve trazer o produto do id correspondente se o produto existir', async function () {
+    it('Deve retornar o produto do id correspondente se o produto existir', async function () {
       sinon.stub(productsModel, 'findById').resolves(products[1]);
 
       const result = await productsService.findById(2);
@@ -30,7 +30,8 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
       expect(result.type).to.be.equal(null);
       expect(result.result).to.be.deep.equal(products[1]);
     });
-    it('Deve trazer a mensagem "message": "Product not found" se o produto não existir', async function () {
+    
+    it('Deve retornar a mensagem "message": "Product not found" se o produto não existir', async function () {
       sinon.stub(productsModel, 'findById').resolves(undefined);
 
       const result = await productsService.findById(3);
@@ -62,6 +63,7 @@ describe('Testes unitários da camada service referente às rotas dos produtos',
       expect(result.type).to.be.equal('ANY_REQUIRED')
       expect(result.result.message).to.be.equal('"name" is required');
     });
+    
     it('Deve retornar um objeto com o erro tipo STRING_MIN e uma mensagem ""name" length must be at least 5 characters long" caso o nome tenha menos que 5 caracteres', async function () {
 
       const invalidName = 'test';
