@@ -15,7 +15,6 @@ describe('Testes unitários da camada controller referente à rota das vendas', 
   });
 
   describe('Quando acessada a rota POST "/sales"', function () {
-    
     it('Deve retornar o status 201 e um objeto com a venda cadastrada ao cadastrar uma venda válida', async function () {
       const res = {};
       const req = {
@@ -111,7 +110,6 @@ describe('Testes unitários da camada controller referente à rota das vendas', 
   });
 
   describe('Quando acessada a rota GET "/sales"', function () {
-
     it('Deve retornar o status 200 e uma lista de todas as vendas se houver vendas cadastradas', async function () {
       const res = {};
       const req = {};
@@ -129,7 +127,6 @@ describe('Testes unitários da camada controller referente à rota das vendas', 
   });
 
   describe('Quando acessada a rota GET "/sales/:id"', function () {
-
     it('Deve retornar o status 200 e uma lista das vendas corresponde ao id passado por parâmetro', async function () {
       const res = {};
       const req = {
@@ -159,6 +156,78 @@ describe('Testes unitários da camada controller referente à rota das vendas', 
       sinon.stub(salesService, 'getSaleById').resolves({ type: 'SALE_NOT_FOUND', result: { message: 'Sale not found' } });
 
       await salesController.getSaleById(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+    });
+  });
+
+  describe('Quando acessada a rota DELETE /sales/:id', function () {
+    it('Deve retornar o status 204', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.end = sinon.stub().returns();
+
+      sinon.stub(salesService, 'deleteSale').resolves({ type: null, result: 1 });
+
+      await salesController.deleteSale(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+    });
+    
+    it('Deve retornar o status 404 e a mensagem "Sale not found" caso a venda não exista', async function () {
+      const res = {};
+      const req = {
+        params: { id: 99 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'deleteSale').resolves({ type: 'SALE_NOT_FOUND', result: { message: 'Sale not found' } });
+
+      await salesController.deleteSale(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+    });
+  });
+
+  describe('Quando acessada a rota PUT /sales/:id', function () {
+    it('Deve retornar o status 200 e uma lista com a venda atualizada', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'updateSale').resolves({ type: null, result: 1 });
+
+      await salesController.updateSale(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith({ saleId: 1, itemsUpdated: req.body });
+    });
+
+    it('Deve retornar o status 404 e a mensagem "Sale not found" caso a venda não exista', async function () {
+      const res = {};
+      const req = {
+        params: { id: 99 },
+        body: {}
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      sinon.stub(salesService, 'updateSale').resolves({ type: 'SALE_NOT_FOUND', result: { message: 'Sale not found' } });
+
+      await salesController.updateSale(req, res);
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
