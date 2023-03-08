@@ -23,6 +23,7 @@ const getSaleById = async (id) => {
   if (sale.length === 0) {
     return { type: 'SALE_NOT_FOUND', result: { message: 'Sale not found' } };
   }
+  
   return { type: null, result: sale };
 };
 
@@ -31,6 +32,7 @@ const deleteSale = async (saleId) => {
   if (error.type) return error;
 
   const result = await salesModel.deleteSale(saleId);
+  
   return { type: null, result };
 };
 

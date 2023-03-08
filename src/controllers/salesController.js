@@ -3,7 +3,6 @@ const errorMap = require('../utils/errorMap');
 
 const createSales = async (req, res) => {
   const sale = req.body;
-  
   const { type, result } = await salesService.createSales(sale);
  
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -19,7 +18,6 @@ const getAllSales = async (_req, res) => {
 
 const getSaleById = async (req, res) => {
   const { id } = req.params;
-  
   const { type, result } = await salesService.getSaleById(id);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -29,7 +27,6 @@ const getSaleById = async (req, res) => {
 
 const deleteSale = async (req, res) => {
   const { id } = req.params;
-  
   const { type, result } = await salesService.deleteSale(id);
   
   if (type) return res.status(errorMap.mapError(type)).json(result);
@@ -39,7 +36,6 @@ const deleteSale = async (req, res) => {
 
 const updateSale = async (req, res) => {
   const { id } = req.params;
-  
   const sale = req.body;
   
   const { type, result } = await salesService.updateSale(id, sale);

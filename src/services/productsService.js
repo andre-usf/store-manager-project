@@ -11,6 +11,7 @@ const findById = async (productId) => {
   if (!product) {
     return { type: 'PRODUCT_NOT_FOUND', result: { message: 'Product not found' } };
   }
+
   return { type: null, result: product };
 };
 
@@ -38,6 +39,7 @@ const deleteProduct = async (productId) => {
   if (error.type) return error;
   
   const result = await productsModel.deleteProduct(productId);
+
   return { type: null, result };
 };
  
@@ -47,6 +49,7 @@ const searchProductByQuery = async (query) => {
     const { result } = await getAll();
     return { type: 'GET_ALL', result };
   }
+  
   return { type: null, result: products };
 };
 
