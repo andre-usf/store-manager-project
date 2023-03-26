@@ -16,7 +16,7 @@ O projeto foi desenvolvido durante o módulo de back-end na [Trybe](https://www.
 
 - Utilização do Docker para criar o ambiente de desenvolvimento;
 - Criação de endpoints utilizando o framework Express.JS e a aplicação do padrão REST;
-- Aplicação da arquitetura em camadas MSC (model, service e controller);
+- Aplicação da arquitetura em camadas - model, service e controller;
 - Validações de campos de produtos e vendas utilizando a biblioteca Joi;
 - Conexão e gerenciamento do banco de dados MySQL.
 
